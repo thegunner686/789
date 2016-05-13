@@ -45,7 +45,6 @@ public class Actor {
 		myGrid = g;
 		gl = l;
 		pl = null;
-		gw.updateActor(this, gl.getRow(), gl.getColumn());
 		g.addPlant(gl.getRow(), gl.getColumn());
 	}
 	
