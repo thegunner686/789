@@ -22,20 +22,20 @@ public class Grid {
 	 * Postcondition: Actor a has been placed at the location of r and c,
 	 * the actor that had been there previously is returned, null if it doesn’t exist
 	 */
-	public Actor  addPlant(Actor a, int r, int c){
-		plantGrid[r][c] = a;
-		actorList[r].add(a);
+	public Plant addPlant(Plant p, int r, int c){
+		plantGrid[r][c] = p;
+		actorList[r].add(p);
 	}
 	
 	/*	Precondition: r and c are valid row and column locations
 	 *	Postconditions: Returns the actor at that location,
 	 *	null if it doesn’t exist
 	 */
-	public void getPlant(int r, int c){
+	public Plant getPlant(int r, int c){
 		if (plantGrid[r][c] != null){
 			return plantGrid[r][c];
 		}
-		return;
+		return null;
 	}
 	
 	/* Precondition: none
@@ -47,7 +47,12 @@ public class Grid {
 	 *	Postcondition: spawns new zombie, adds zombie to zombieTracker & actorList, 
 	 *	and places new //zombie on the map
 	 */
-	public Zombie addZombie(){}
+	public Zombie addZombie(){
+		Zombie z = new Zombie();
+		zombieTracker.add(z);
+		actorList.add(z);
+
+	}
 
 	// postcondition: returns the closest zombie in row r
 	public Zombie getFirstZombie(int r){}
