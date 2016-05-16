@@ -7,7 +7,8 @@ public class Actor {
 	private int damage;
 	
 	
-	// Postcondition: Constructs a new actor
+	//precondition: This actor has a grid
+	//post condition: actor does nothing (overridden  method)
 	public Actor(){
 	}
 	
