@@ -14,6 +14,8 @@ public class Plant extends Actor {
 		putSelfInGrid(myGrid, gl);
 	}
 	
+	/ Precondition: Plant is instantiated in plant grid and alive
+	// Postcondition: Plant does an action
 	public void act(){
 		Actor project = new Projectile();
 		project.putSelfInGrid(myGrid, gl);
