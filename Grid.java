@@ -72,7 +72,7 @@ public class Grid {
 	 */
 	public Zombie spawnZombie(){
 		Zombie z = new Zombie();
-		GridLocation ranLoc = new GridLocation((int) (Math.random() * 5), 11);
+		GridLocation ranLoc = new GridLocation((int) (Math.random() * 6), 11);
 		z.putSelfInGrid(this, ranLoc);
 		zombieTracker[ranLoc.getRow()].add(z);
 		actorList.add((Actor) z);
