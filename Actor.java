@@ -1,17 +1,35 @@
+package thegame;
+
+import javax.swing.*;
 
 public class Actor {
-	private GridLocation gl;
-	private PixelLocation pl;
-	private Grid myGrid;
-	private int health;
-	private int damage;
+	protected GridLocation gl;
+	protected PixelLocation pl;
+	protected Integer imageID;
+	protected Grid myGrid;
+	protected int health;
+	protected int damage;
 	
 	
-	//precondition: This actor has a grid
-	//post condition: actor does nothing (overridden  method)
+	// Postcondition: Constructs a new actor
 	public Actor(){
 	}
 	
+	public Integer getID() {
+		return imageID;
+	}
+	
+	public PixelLocation getPixelLocation() {
+		return pl;
+	}
+	
+	public GridLocation getGridLocation() {
+		return gl;
+	}
+	
+	public ImageIcon getImage(ImageLoader im) {
+		return im.getImage(this.imageID);
+	}
 	
 	public void setHealth(int h){
 		health = h;
@@ -36,6 +54,9 @@ public class Actor {
 	//precondition: This actor has a grid
 	//post condition: actor does nothing (overridden  method)
 	public void act(){
+		if(myGrid != null) {
+			
+		}
 	}
 	
 	
@@ -45,21 +66,29 @@ public class Actor {
 	public void putSelfInGrid(Grid g, GridLocation l){
 		myGrid = g;
 		gl = l;
-		pl = null;
-		g.addPlant(gl.getRow(), gl.getColumn());
+		pl = new PixelLocation(gl.getCol() * 50, gl.getRow() * 50);
+		if(this instanceof Plant)
+			g.addPlant((Plant) this, gl.getRow(), gl.getCol());
+		else
+			g.getActorList().add(this);	
+		health = 0;
+		damage = 0;
 	}
 	
+	public int hashCode() {
+		int i = 1;
+			i *= health;
+			i *= damage;
+		return i;
+	}
 	
-	//postcondition: this actor is removed from myGrid, and myGrid is now null, gl is null
+	//postcondition: this actor is removed from myGrid, and myGrid is now null, gl is nul
 	public void removeSelfFromGrid(){
 		myGrid = null;
 		gl = null;
 	}
 	
-	public int hashCode(){
-		int hash = damage*21 + health;
-		hash = hash*5 + gl.getRow();
-		hash = hash*7 + gl.getCol();
-		return hash;
+	public void setGridLocation(GridLocation g) {
+		gl = g;
 	}
 }

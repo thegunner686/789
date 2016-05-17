@@ -1,24 +1,24 @@
+package thegame;
 
-public class Plant extends Actor {
-	private GridLocation gl;
-	private PixelLocation pl;
-	private Grid myGrid;
-	private int health;
-	private int damage;
-	
-	public Plant(Grid g, GridLocation l, int hlth, int dmg){
-		myGrid = g;
-		gl = l;
-		health = hlth;
-		damage = dmg;
-		putSelfInGrid(myGrid, gl);
+public class Plant extends Actor{
+	private int iteration;
+	public Plant() {
+		imageID = new Integer(1);
+		iteration = 1;
 	}
 	
-	/ Precondition: Plant is instantiated in plant grid and alive
-	// Postcondition: Plant does an action
-	public void act(){
-		Actor project = new Projectile();
-		project.putSelfInGrid(myGrid, gl);
+	public void act() {
+		if(myGrid != null) {
+			Projectile newPro = new Projectile(1.0, this);
+			myGrid.getProjectileList().add(newPro);
+		}
+	}
+	
+	public int getIteration() {
+		return iteration;
+	}
+	
+	public void iterate() {
+		iteration++;
 	}
 }
-
