@@ -42,7 +42,7 @@ public class Controller implements Runnable
     		for(Actor a : al) {
     			if(a instanceof Plant) {
     				System.out.println("plant");
-    				if(((Plant)a).getIteration() % 100 == 0)  {
+    				if(((Plant)a).getIteration() % 300 == 0)  {
     					a.act();
     					((Plant) a).iterate();
     				} else {

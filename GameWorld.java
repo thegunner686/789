@@ -1,5 +1,7 @@
 package thegame;
 import javax.swing.*;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -11,18 +13,22 @@ public class GameWorld extends JFrame
 	private HashMap<Actor, GameObject> gameObjects;
     private GridButton[][] gridButtons;
     private JButton[] shopButtons;
-    private JPanel myPanel;
+    private JLayeredPane myPanel;
+    private JLayeredPane gamePanel;
     private Controller control;
 
     public GameWorld(Controller c)
     {
     	gameObjects = new HashMap<Actor, GameObject>();
-        myPanel = new JPanel();
+        myPanel = new JLayeredPane();
+        gamePanel = new JLayeredPane();
         myPanel.setLayout(null);
         control = c;
         this.setSize(new Dimension(600, 600));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        myPanel.add(gamePanel);
         
         gridButtons = new GridButton[5][9];
         shopButtons = new JButton[3];
@@ -42,6 +48,7 @@ public class GameWorld extends JFrame
                 GridButton j = new GridButton(i, q);
                 j.setBounds(q * buttonSize + 25, i * buttonSize + 100, buttonSize, buttonSize);
                 j.setMargin(new Insets(0, 0, 0, 0));
+                j.setBackground(Color.GREEN);
                 //j.setBorderPainted(false);
                 //j.setBorder(null);
                 gridButtons[i][q] = j;
@@ -73,13 +80,15 @@ public class GameWorld extends JFrame
     	gm.update();
     }
     
-    public JPanel getMainPanel() {
+    public JLayeredPane getMainPanel() {
     	return myPanel;
     }
     
     public void refresh() {
     	myPanel.validate();
     	myPanel.repaint();
+    	gamePanel.validate();
+    	gamePanel.repaint();
     }
     
     public class ShopButton extends JButton {
