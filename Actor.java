@@ -13,6 +13,8 @@ public class Actor {
 	
 	// Postcondition: Constructs a new actor
 	public Actor(){
+		health = 0;
+		damage = 0;
 	}
 	
 	public Integer getID() {
@@ -54,9 +56,6 @@ public class Actor {
 	//precondition: This actor has a grid
 	//post condition: actor does nothing (overridden  method)
 	public void act(){
-		if(myGrid != null) {
-			
-		}
 	}
 	
 	
@@ -71,8 +70,6 @@ public class Actor {
 			g.addPlant((Plant) this, gl.getRow(), gl.getCol());
 		else
 			g.getActorList().add(this);	
-		health = 0;
-		damage = 0;
 	}
 	
 	public int hashCode() {
@@ -84,11 +81,15 @@ public class Actor {
 	
 	//postcondition: this actor is removed from myGrid, and myGrid is now null, gl is nul
 	public void removeSelfFromGrid(){
+		//myGrid.addDeadActor(this);
 		myGrid = null;
-		gl = null;
 	}
 	
 	public void setGridLocation(GridLocation g) {
 		gl = g;
+	}
+	
+	public Grid getGrid() {
+		return myGrid;
 	}
 }

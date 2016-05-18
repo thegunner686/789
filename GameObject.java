@@ -26,7 +26,7 @@ public class GameObject {
 			myImage = new JButton(img);
 			PixelLocation px = myActor.getPixelLocation();
 			myImage.setBounds((int)(px.getX() + offsetX), (int)(px.getY() + offsetY), 50, 50);
-			gw.getMainPanel().add(myImage);
+			gw.getMainPanel().add(myImage, gw.getComponentCount() - 1);
 		}
 	}
 	
@@ -35,5 +35,9 @@ public class GameObject {
 			return;
 		PixelLocation px = myActor.getPixelLocation();
 		myImage.setBounds((int)(px.getX() + offsetX), (int)(px.getY() + offsetY), 50, 50);
+	}
+	
+	public JComponent getComponent() {
+		return myImage;
 	}
 }

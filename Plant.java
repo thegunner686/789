@@ -9,8 +9,13 @@ public class Plant extends Actor{
 	
 	public void act() {
 		if(myGrid != null) {
-			Projectile newPro = new Projectile(1.0, this);
-			myGrid.getProjectileList().add(newPro);
+			if(iteration % 300 == 0) {
+				if(myGrid.getFirstZombie(gl.getRow()) != null) {
+					Projectile newPro = new Projectile(1.0, this, 25);
+					myGrid.getProjectileList().add(newPro);
+				}
+			}
+			iterate();
 		}
 	}
 	

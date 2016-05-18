@@ -10,12 +10,16 @@ public class Grid {
 	ArrayList<Projectile> projectileList;
 	ArrayList<Plant> plantWaitingList;
 	LinkedList<Actor> actorList;
+	ArrayList<Actor> deadActorList;
+	ArrayList<Actor> currencyWaitingList;
 	
 	public Grid() {
 		plantGrid = new Plant[5][9];
 		projectileList = new ArrayList<Projectile>();
 		plantWaitingList = new ArrayList<Plant>();
 		zombieTracker = new PriorityQueue[5];
+		currencyWaitingList = new ArrayList<Actor>();
+		deadActorList = new ArrayList<Actor>();
 		for(int i = 0; i < 5; i++) {
 			zombieTracker[i] = new PriorityQueue<Zombie>();
 		}
@@ -71,17 +75,18 @@ public class Grid {
 	 *	and places new //zombie on the map
 	 */
 	public Zombie spawnZombie(){
-		Zombie z = new Zombie();
-		GridLocation ranLoc = new GridLocation((int) (Math.random() * 6), 11);
+		Zombie z = new Zombie(100);
+		GridLocation ranLoc = new GridLocation((int) (Math.random() * 5), 11);
 		z.putSelfInGrid(this, ranLoc);
 		zombieTracker[ranLoc.getRow()].add(z);
 		actorList.add((Actor) z);
+		//System.out.println("ZOMBIE CREATED");
 		return z;
 	}
 
 	// postcondition: returns the closest zombie in row r
 	public Zombie getFirstZombie(int r){
-		return zombieTracker[r].poll();
+		return zombieTracker[r].peek();
 	}
 
 	
@@ -101,6 +106,18 @@ public class Grid {
 	 */
 	public boolean isEmpty(int r, int c){
 		return plantGrid[r][c] == null;
+	}
+	
+	public void addDeadActor(Actor a) {
+		deadActorList.add(a);
+	}
+	
+	public ArrayList<Actor> getDeadActors() {
+		return deadActorList;
+	}
+	
+	public ArrayList<Actor> getCurrencyList() {
+		return currencyWaitingList;
 	}
 	
 }

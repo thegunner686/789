@@ -34,11 +34,11 @@ public class PixelLocation
     	this.myY += d;
     }
     
-    private double distanceTo(PixelLocation p){
+    public double distanceTo(PixelLocation p){
         return Math.sqrt(Math.pow(p.getX() - myX, 2) + Math.pow(p.getY() - myY, 2));
     }
     
     public boolean withinRange(PixelLocation p, int range) {
-        return (int) distanceTo(p) <= range;
+        return distanceTo(p) <= range;
     }
 }

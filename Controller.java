@@ -40,17 +40,7 @@ public class Controller implements Runnable
     	while(running) {
     		List<Actor> al = myGrid.getActorList();
     		for(Actor a : al) {
-    			if(a instanceof Plant) {
-    				System.out.println("plant");
-    				if(((Plant)a).getIteration() % 300 == 0)  {
-    					a.act();
-    					((Plant) a).iterate();
-    				} else {
-    					((Plant)a).iterate();
-    				}
-    			} else {
-    				a.act();
-    			}
+    			a.act();
     			gw.updateActor(a);
     		}
     		ArrayList<Plant> pwl = myGrid.getPlantWaitingList();
@@ -68,6 +58,10 @@ public class Controller implements Runnable
     			gw.initializeActor(p);
     			
     		}
+    		/*ArrayList<Actor> deadActors = myGrid.getDeadActors();
+    		for(int i = deadActors.size() - 1; i >= 0; i--) {
+    			al.remove(deadActors.remove(i));
+    		}*/
     		if(zombieTimer % 200 == 0 && zombieTimer > 800) 
     			gw.initializeActor(myGrid.spawnZombie());
     		gw.refresh();
@@ -94,6 +88,8 @@ public class Controller implements Runnable
     
     // called from shop class
 	public void plantProcessed(Actor processed, int r, int c) {
+		if(!myGrid.isEmpty(r, c))
+			return;
 		processed.setGridLocation(new GridLocation(r, c));
 		myGrid.getPlantWaitingList().add((Plant)processed);
 		/*processed.putSelfInGrid(myGrid,  new GridLocation(r, c));

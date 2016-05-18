@@ -14,21 +14,17 @@ public class GameWorld extends JFrame
     private GridButton[][] gridButtons;
     private JButton[] shopButtons;
     private JLayeredPane myPanel;
-    private JLayeredPane gamePanel;
     private Controller control;
 
     public GameWorld(Controller c)
     {
     	gameObjects = new HashMap<Actor, GameObject>();
         myPanel = new JLayeredPane();
-        gamePanel = new JLayeredPane();
         myPanel.setLayout(null);
         control = c;
         this.setSize(new Dimension(600, 600));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        myPanel.add(gamePanel);
         
         gridButtons = new GridButton[5][9];
         shopButtons = new JButton[3];
@@ -55,8 +51,7 @@ public class GameWorld extends JFrame
                 myPanel.add(j);
             }
         }
-      
-        
+     
         this.add(myPanel);
         
         this.setVisible(true);
@@ -76,8 +71,15 @@ public class GameWorld extends JFrame
     }
     
     public void updateActor(Actor a) {
+    	if(a.getGrid() == null) {
+    		GameObject gm = gameObjects.remove(a);
+    		if(gm != null) {
+    		gm.getComponent().setVisible(false);
+    		}
+    	} else {
     	GameObject gm = gameObjects.get(a);
     	gm.update();
+    	}
     }
     
     public JLayeredPane getMainPanel() {
@@ -87,8 +89,6 @@ public class GameWorld extends JFrame
     public void refresh() {
     	myPanel.validate();
     	myPanel.repaint();
-    	gamePanel.validate();
-    	gamePanel.repaint();
     }
     
     public class ShopButton extends JButton {
