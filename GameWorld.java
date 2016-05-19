@@ -3,7 +3,10 @@ import javax.swing.*;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -19,8 +22,9 @@ public class GameWorld extends JFrame
     public GameWorld(Controller c)
     {
     	gameObjects = new HashMap<Actor, GameObject>();
-        myPanel = new JLayeredPane();
+        myPanel = new drawPanel();
         myPanel.setLayout(null);
+        myPanel.setOpaque(true);
         control = c;
         this.setSize(new Dimension(600, 600));
         this.setLocationRelativeTo(null);
@@ -45,7 +49,7 @@ public class GameWorld extends JFrame
                 j.setBounds(q * buttonSize + 25, i * buttonSize + 100, buttonSize, buttonSize);
                 j.setMargin(new Insets(0, 0, 0, 0));
                 j.setBackground(Color.GREEN);
-                //j.setBorderPainted(false);
+                j.setBorderPainted(false);
                 //j.setBorder(null);
                 gridButtons[i][q] = j;
                 myPanel.add(j);
@@ -73,8 +77,10 @@ public class GameWorld extends JFrame
     public void updateActor(Actor a) {
     	if(a.getGrid() == null) {
     		GameObject gm = gameObjects.remove(a);
-    		if(gm != null) {
-    		gm.getComponent().setVisible(false);
+    		if(gm != null && !(a instanceof Plant)) {
+    			gm.getComponent().setVisible(false);
+    		} else {
+    			((JButton)gm.getComponent()).setIcon(null);
     		}
     	} else {
     	GameObject gm = gameObjects.get(a);
@@ -146,7 +152,26 @@ public class GameWorld extends JFrame
 			control.gridButtonClicked(ex.getRow(), ex.getCol());
 			System.out.print("clicked");
 		}
+		
     	
+    }
+    
+    public class drawPanel extends JLayeredPane {
+    	public void paintComponent(Graphics g) {
+        	super.paintComponent(g);
+        	Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        	g2.setColor(Color.GREEN);
+        	g2.fillRect(25, 100, 450, 250);
+        	g2.setColor(Color.BLACK);
+        	for(int i = 0; i <= 9; i++) {
+        		g2.drawLine(i * 50 + 25, 100, i * 50 + 25, 350);
+        	}
+        	for(int i = 0; i <= 5; i++) {
+        		g2.drawLine(25, i * 50 + 100, 475, i * 50 + 100);
+        	}
+    	}
     }
     
     

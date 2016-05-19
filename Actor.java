@@ -9,6 +9,7 @@ public class Actor {
 	protected Grid myGrid;
 	protected int health;
 	protected int damage;
+	protected String name;
 	
 	
 	// Postcondition: Constructs a new actor
@@ -74,8 +75,8 @@ public class Actor {
 	
 	public int hashCode() {
 		int i = 1;
-			i *= health;
-			i *= damage;
+			i *= imageID.hashCode();
+			i *= name.hashCode();
 		return i;
 	}
 	

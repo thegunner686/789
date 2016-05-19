@@ -11,7 +11,11 @@ public class ImageLoader {
 		imageMap = new HashMap<Integer, ImageIcon>();
 		//ClassLoader cldr = this.getClass().getClassLoader();
 		try {
-			imageMap.put(new Integer(1), new ImageIcon("src/zombie.png"));
+			//imageMap.put(new Integer(1), new ImageIcon("srczombie.png"));
+			
+			imageMap.put(new Integer(1), new ImageIcon("src/Zombie.gif"));
+			imageMap.put(new Integer(2), new ImageIcon("src/ShooterActor.gif"));
+			imageMap.put(new Integer(3), new ImageIcon("src/Projectile.gif"));
 		} catch(Exception e) {
 			System.out.print("There was an error with the loading of the image");
 		}

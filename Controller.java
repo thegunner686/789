@@ -2,6 +2,7 @@ package thegame;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Queue;
 
 public class Controller implements Runnable
@@ -39,9 +40,12 @@ public class Controller implements Runnable
     public void run() {
     	while(running) {
     		List<Actor> al = myGrid.getActorList();
+    		//ListIterator<Actor> iter = al.listIterator();
     		for(Actor a : al) {
-    			a.act();
-    			gw.updateActor(a);
+    			if(a.getGrid() != null) {
+    				a.act();
+    				gw.updateActor(a);
+    			}
     		}
     		ArrayList<Plant> pwl = myGrid.getPlantWaitingList();
     		for(int i = pwl.size() - 1; i >= 0; i--) {
@@ -58,10 +62,13 @@ public class Controller implements Runnable
     			gw.initializeActor(p);
     			
     		}
-    		/*ArrayList<Actor> deadActors = myGrid.getDeadActors();
-    		for(int i = deadActors.size() - 1; i >= 0; i--) {
-    			al.remove(deadActors.remove(i));
-    		}*/
+    		
+    		ArrayList<Actor> dPlant = myGrid.getDeadPlantList();
+    		for(int i = dPlant.size() - 1; i >= 0; i--) {
+    			GridLocation gdl = dPlant.remove(i).getGridLocation();
+    			myGrid.removePlant(gdl.getRow(), gdl.getCol());
+    		}
+    		
     		if(zombieTimer % 200 == 0 && zombieTimer > 800) 
     			gw.initializeActor(myGrid.spawnZombie());
     		gw.refresh();

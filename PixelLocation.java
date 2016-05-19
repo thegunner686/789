@@ -1,6 +1,6 @@
 package thegame;
 
-public class PixelLocation
+public class PixelLocation implements Comparable
 {
     private double myX;
     private double myY;
@@ -40,5 +40,16 @@ public class PixelLocation
     
     public boolean withinRange(PixelLocation p, int range) {
         return distanceTo(p) <= range;
+    }
+    
+    public int compareTo(Object o) {
+    	PixelLocation p = (PixelLocation) o;
+    	if(myX < p.getX()) {
+    		return -1;
+    	} else if(myX == p.getX()) {
+    		return 0;
+    	} else {
+    		return 1;
+    	}
     }
 }

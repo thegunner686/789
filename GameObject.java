@@ -23,7 +23,7 @@ public class GameObject {
 			myImage = jb[gl.getRow()][gl.getCol()];
 			((JButton)myImage).setIcon(img);
 		} else {
-			myImage = new JButton(img);
+			myImage = new JLabel(img);
 			PixelLocation px = myActor.getPixelLocation();
 			myImage.setBounds((int)(px.getX() + offsetX), (int)(px.getY() + offsetY), 50, 50);
 			gw.getMainPanel().add(myImage, gw.getComponentCount() - 1);
@@ -34,7 +34,7 @@ public class GameObject {
 		if(myActor instanceof Plant)
 			return;
 		PixelLocation px = myActor.getPixelLocation();
-		myImage.setBounds((int)(px.getX() + offsetX), (int)(px.getY() + offsetY), 50, 50);
+		myImage.setBounds((int)(px.getX() + offsetX), (int)(px.getY() + offsetY), 50, 65);
 	}
 	
 	public JComponent getComponent() {
