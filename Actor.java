@@ -16,6 +16,8 @@ public class Actor {
 	public Actor(){
 		health = 0;
 		damage = 0;
+		name = "";
+		imageID = new Integer(0);
 	}
 	
 	public Integer getID() {

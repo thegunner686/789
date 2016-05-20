@@ -34,7 +34,7 @@ public class Zombie extends Actor implements Comparable{
 			} else {
 				pl.incrementX(-1 * this.speed);
 				gl.setCol((int) ((pl.getX() - 25) / 50));
-				System.out.println("gl.c: " + gl.getCol());
+				//System.out.println("gl.c: " + gl.getCol());
 			}
 		}
 	}

@@ -18,6 +18,7 @@ public class GameWorld extends JFrame
     private JButton[] shopButtons;
     private JLayeredPane myPanel;
     private Controller control;
+    private JLabel shopTotal;
 
     public GameWorld(Controller c)
     {
@@ -30,6 +31,11 @@ public class GameWorld extends JFrame
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        shopTotal = new JLabel("0");
+        shopTotal.setBounds(100, 0, 70, 50);
+        
+        myPanel.add(shopTotal);
+        
         gridButtons = new GridButton[5][9];
         shopButtons = new JButton[3];
         
@@ -40,6 +46,10 @@ public class GameWorld extends JFrame
         	shopButtons[i] = j;
         	myPanel.add(j);
         }
+        	shopButtons[0].setIcon(control.getImageLoader().getImage(new Integer(2)));
+        	
+        	shopButtons[1].setIcon(control.getImageLoader().getImage(new Integer(4)));
+        	shopButtons[2].setIcon(control.getImageLoader().getImage(new Integer(6)));
         
         int buttonSize = 50;
         
@@ -74,13 +84,19 @@ public class GameWorld extends JFrame
     	gameObjects.put(a,  gm);
     }
     
+    public void updateShopTotal(int t) {
+    	shopTotal.setText("" + t);
+    }
+    
     public void updateActor(Actor a) {
     	if(a.getGrid() == null) {
     		GameObject gm = gameObjects.remove(a);
-    		if(gm != null && !(a instanceof Plant)) {
-    			gm.getComponent().setVisible(false);
-    		} else {
-    			((JButton)gm.getComponent()).setIcon(null);
+    		if(gm != null) {
+    			if(a instanceof Plant) {
+    				((JButton)gm.getComponent()).setIcon(null);
+    			} else {
+    				gm.getComponent().setVisible(false);
+    			}
     		}
     	} else {
     	GameObject gm = gameObjects.get(a);
@@ -156,6 +172,18 @@ public class GameWorld extends JFrame
     	
     }
     
+    public ActionListener getCurrencyActionListener() {
+    	return new CurrencyListener();
+    }
+    
+    public class CurrencyListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			control.currencyClicked(((SpecialButtons.CurrencyButton)e.getSource()).getObject().getActor());
+		}
+    	
+    }
+    
     public class drawPanel extends JLayeredPane {
     	public void paintComponent(Graphics g) {
         	super.paintComponent(g);
@@ -172,6 +200,7 @@ public class GameWorld extends JFrame
         		g2.drawLine(25, i * 50 + 100, 475, i * 50 + 100);
         	}
     	}
+    	
     }
     
     

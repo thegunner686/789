@@ -32,7 +32,7 @@ public class Controller implements Runnable
     public void startGame() {
         gw = new GameWorld(this);
         myGrid = new Grid();
-        myShop = new Shop(3, this);
+        myShop = new Shop(this);
         running = true;
         run();
     }
@@ -44,8 +44,8 @@ public class Controller implements Runnable
     		for(Actor a : al) {
     			if(a.getGrid() != null) {
     				a.act();
-    				gw.updateActor(a);
     			}
+    			gw.updateActor(a);
     		}
     		ArrayList<Plant> pwl = myGrid.getPlantWaitingList();
     		for(int i = pwl.size() - 1; i >= 0; i--) {
@@ -63,11 +63,20 @@ public class Controller implements Runnable
     			
     		}
     		
+    		ArrayList<Currency> cq = myGrid.getCurrencyList();
+    		for(int i = cq.size() - 1; i >= 0; i--) {
+    			Currency ct = cq.remove(i);
+    			ct.putSelfInGrid(myGrid, ct.getParent().getGridLocation());
+    			gw.initializeActor(ct);
+    		}
+    		
     		ArrayList<Actor> dPlant = myGrid.getDeadPlantList();
     		for(int i = dPlant.size() - 1; i >= 0; i--) {
     			GridLocation gdl = dPlant.remove(i).getGridLocation();
     			myGrid.removePlant(gdl.getRow(), gdl.getCol());
     		}
+    		
+    		gw.updateShopTotal(myShop.getTotal());
     		
     		if(zombieTimer % 200 == 0 && zombieTimer > 800) 
     			gw.initializeActor(myGrid.spawnZombie());
@@ -90,12 +99,19 @@ public class Controller implements Runnable
     }
     
     public void gridButtonClicked(int r, int c) {
+    	if(!myGrid.isEmpty(r, c))
+			return;
     	myShop.processSelected(r,  c);
+    }
+    
+    public void currencyClicked(Actor a) {
+    	a.removeSelfFromGrid();
+    	myShop.addToTotal(((Currency)a).getValue());
     }
     
     // called from shop class
 	public void plantProcessed(Actor processed, int r, int c) {
-		if(!myGrid.isEmpty(r, c))
+		if(processed == null) 
 			return;
 		processed.setGridLocation(new GridLocation(r, c));
 		myGrid.getPlantWaitingList().add((Plant)processed);

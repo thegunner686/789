@@ -1,28 +1,25 @@
 package thegame;
 
-public class Sunflower extends Plant{
-	private int iteration;
+public class Sunflower extends Plant {
 	
 	public Sunflower() {
 		imageID = new Integer(4);
-		iteration = 1;
+		name = "sunflower";
+		health = 120;
 	}
 	
 	public void act() {
 		if(myGrid != null) {
-			if(iteration % 500 == 0) {
-					Currency newCur = new Currency(250);
-					myGrid.getCurrencyWaitingList().add(newCur);
+			if(health <= 0) {
+				myGrid.getDeadPlantList().add(this);
+				removeSelfFromGrid();
+				return;
 			}
-			iterate();
+			if(iteration % 2000 == 0) {
+				Currency c = new Currency(10, this);
+				myGrid.getCurrencyList().add(c);
+			}
+			iteration++;
 		}
-	}
-	
-	public int getIteration() {
-		return iteration;
-	}
-	
-	public void iterate() {
-		iteration++;
 	}
 }

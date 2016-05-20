@@ -1,5 +1,8 @@
 package thegame;
 
+import java.util.Iterator;
+import java.util.PriorityQueue;
+
 public class Projectile extends Actor {
 	private double speed;
 	private Plant parent;
@@ -20,7 +23,7 @@ public class Projectile extends Actor {
 	public void act() {
 		if(myGrid != null) {
 			//System.out.println(z);
-			Zombie z = getTarget();
+			Zombie z = ((Shooter)parent).getTarget();
 			if(z != null) {
 				if(pl.withinRange(z.getPixelLocation(), 25)) {
 					System.out.println("HIT");
@@ -33,15 +36,5 @@ public class Projectile extends Actor {
 			if(pl.getX() > 600) 
 				removeSelfFromGrid();
 		}
-	}
-	
-	public Zombie getTarget() {
-		Zombie z = myGrid.getFirstZombie(gl.getRow());
-		while(z != null && z.getGrid() == null) {
-				myGrid.removeFirstZombie(gl.getRow());
-				z = myGrid.getFirstZombie(gl.getRow());
-		}
-		
-		return z;
 	}
 }

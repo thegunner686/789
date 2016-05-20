@@ -1,5 +1,7 @@
 package thegame;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 public class GameObject {
@@ -23,7 +25,12 @@ public class GameObject {
 			myImage = jb[gl.getRow()][gl.getCol()];
 			((JButton)myImage).setIcon(img);
 		} else {
-			myImage = new JLabel(img);
+			if(myActor instanceof Currency) {
+				myImage = new SpecialButtons.CurrencyButton(img, this);
+				((SpecialButtons.CurrencyButton)myImage).addActionListener(gw.getCurrencyActionListener());
+			} else {
+				myImage = new JLabel(img);
+			}
 			PixelLocation px = myActor.getPixelLocation();
 			myImage.setBounds((int)(px.getX() + offsetX), (int)(px.getY() + offsetY), 50, 50);
 			gw.getMainPanel().add(myImage, gw.getComponentCount() - 1);
@@ -40,4 +47,9 @@ public class GameObject {
 	public JComponent getComponent() {
 		return myImage;
 	}
+	
+	public Actor getActor() {
+		return myActor;
+	}
+	
 }

@@ -10,7 +10,7 @@ public class Grid {
 	ArrayList<Projectile> projectileList;
 	ArrayList<Plant> plantWaitingList;
 	LinkedList<Actor> actorList;
-	ArrayList<Actor> currencyWaitingList;
+	ArrayList<Currency> currencyWaitingList;
 	ArrayList<Actor> deadPlantList;
 	
 	public Grid() {
@@ -19,7 +19,7 @@ public class Grid {
 		plantWaitingList = new ArrayList<Plant>();
 		zombieTracker = new PriorityQueue[5];
 		deadPlantList = new ArrayList<Actor>();
-		currencyWaitingList = new ArrayList<Actor>();
+		currencyWaitingList = new ArrayList<Currency>();
 		for(int i = 0; i < 5; i++) {
 			zombieTracker[i] = new PriorityQueue<Zombie>();
 		}
@@ -119,7 +119,7 @@ public class Grid {
 		return plantGrid[r][c] == null;
 	}
 	
-	public ArrayList<Actor> getCurrencyList() {
+	public ArrayList<Currency> getCurrencyList() {
 		return currencyWaitingList;
 	}
 	

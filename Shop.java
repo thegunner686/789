@@ -7,15 +7,14 @@ public class Shop {
 	private Controller control;
 	private int total;
 	
-	public Shop(int s, Controller xc) {
+	public Shop(Controller xc) {
 		total = 100;
 		selectedItem = 0;
 		itemIsSelected = false;
 		control = xc;
-		shopItems = new ShopItem[s];
-		for(int i = 0; i < s; i++) {
-			shopItems[i] =  new ShopPlant(10);
-		}
+		shopItems = new ShopItem[3];
+		shopItems[0] = new ShopShooter(20);
+		shopItems[1] = new ShopSunflower(10);
 	}
 	
 	public ShopItem[] getShopItems() {
@@ -55,7 +54,7 @@ public class Shop {
 	public void processSelected(int r, int c) {
 		if(somethingSelected()) {
 			ShopItem si = shopItems[selectedItem];
-			if(si instanceof ShopPlant) {
+			if(si instanceof ShopItem) {
 				control.plantProcessed(processPlantItem((ShopPlant)si), r, c);
 			} else {
 				
@@ -64,9 +63,11 @@ public class Shop {
 	}
 	
 	private Actor processPlantItem(ShopPlant s) {
-		if(canBuy(s.getCost()))
+		if(canBuy(s.getCost())) {
+				removeFromTotal(s.getCost());
 				return s.getPlant();
-		else
+		} else {
 				return null;
+		}
 	}
 }
