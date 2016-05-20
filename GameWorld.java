@@ -32,7 +32,7 @@ public class GameWorld extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         shopTotal = new JLabel("0");
-        shopTotal.setBounds(100, 0, 70, 50);
+        shopTotal.setBounds(200, 0, 70, 50);
         
         myPanel.add(shopTotal);
         

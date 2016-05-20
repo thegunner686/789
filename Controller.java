@@ -99,8 +99,6 @@ public class Controller implements Runnable
     }
     
     public void gridButtonClicked(int r, int c) {
-    	if(!myGrid.isEmpty(r, c))
-			return;
     	myShop.processSelected(r,  c);
     }
     
@@ -111,6 +109,8 @@ public class Controller implements Runnable
     
     // called from shop class
 	public void plantProcessed(Actor processed, int r, int c) {
+		if(!myGrid.isEmpty(r, c))
+			return;
 		if(processed == null) 
 			return;
 		processed.setGridLocation(new GridLocation(r, c));
@@ -118,5 +118,14 @@ public class Controller implements Runnable
 		/*processed.putSelfInGrid(myGrid,  new GridLocation(r, c));
 		myGrid.addPlant((Plant)processed,  r,  c);
 		gw.initializeActor(processed);*/
+	}
+	
+	public void removePlant(int r, int c) {
+		if(myGrid.isEmpty(r, c)) 
+			return;
+		Plant p = myGrid.getPlant(r,  c);
+		p.removeSelfFromGrid();
+		myGrid.getDeadPlantList().add(p);
+		System.out.println("LOL");
 	}
 }

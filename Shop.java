@@ -15,6 +15,7 @@ public class Shop {
 		shopItems = new ShopItem[3];
 		shopItems[0] = new ShopShooter(20);
 		shopItems[1] = new ShopSunflower(10);
+		shopItems[2] = new ShopRemover(0);
 	}
 	
 	public ShopItem[] getShopItems() {
@@ -54,10 +55,10 @@ public class Shop {
 	public void processSelected(int r, int c) {
 		if(somethingSelected()) {
 			ShopItem si = shopItems[selectedItem];
-			if(si instanceof ShopItem) {
+			if(si instanceof ShopPlant) {
 				control.plantProcessed(processPlantItem((ShopPlant)si), r, c);
 			} else {
-				
+				control.removePlant(r, c);
 			}
 		}
 	}
