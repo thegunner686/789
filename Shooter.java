@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 
 public class Shooter extends Plant{
 	
-	private Zombie target;
+	protected Zombie target;
 	
 	public Shooter() {
 		name = "shooter";
@@ -37,7 +37,7 @@ public class Shooter extends Plant{
 		return target;
 	}
 	
-	private void getTargetM() {
+	protected void getTargetM() {
 		PriorityQueue<Zombie> zQue = myGrid.getZombieQueue(gl.getRow());
 		Iterator<Zombie> iter = zQue.iterator();
 		Zombie z = null;
