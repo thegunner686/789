@@ -1,10 +1,11 @@
 package thegame;
 
-public class Zombie extends Actor implements Comparable{
+public class Zombie extends Actor implements Comparable<Zombie> {
 	private Double speed;
 	private int eatingIterator;
 
-	public Zombie(int h) {
+	public Zombie(int h, long tm) {
+		super(tm);
 		name = "zombie";
 		speed = 0.25;
 		damage = 25;
@@ -20,7 +21,7 @@ public class Zombie extends Actor implements Comparable{
 				System.out.print("ZOMBIE DEAD: " + this.health);
 				return;
 			}
-			if(pl.getX() < 0) {
+			if(pl.getX() < -100) {
 				removeSelfFromGrid();
 				System.out.print("ZOMBIE OFF GRID");
 				return;
@@ -33,14 +34,14 @@ public class Zombie extends Actor implements Comparable{
 				eatingIterator++;
 			} else {
 				pl.incrementX(-1 * this.speed);
-				gl.setCol((int) ((pl.getX() - 25) / 50));
+				gl.setCol((int) Math.ceil(((pl.getX() - 25) / 50.0)));
 				//System.out.println("gl.c: " + gl.getCol());
 			}
 		}
 	}
 	
-	public int compareTo(Object o) {
-		PixelLocation oPL = ((Zombie)o).getPixelLocation();
+	public int compareTo(Zombie o) {
+		PixelLocation oPL = o.getPixelLocation();
 		return pl.compareTo(oPL);
 	}
 	

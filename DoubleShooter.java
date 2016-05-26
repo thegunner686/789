@@ -2,6 +2,12 @@ package thegame;
 
 public class DoubleShooter extends Shooter{
 	
+	public DoubleShooter(long tm) {
+		super(tm);
+		imageID = new Integer(2);
+		health = 200;
+	}
+
 	public void act() {
 		if(myGrid != null) {
 			if(health <= 0) {
@@ -9,18 +15,17 @@ public class DoubleShooter extends Shooter{
 				removeSelfFromGrid();
 				return;
 			}
-			if(iteration % 270 == 0) {
+			if(iteration % 100 == 0) {
 				getTargetM();
 				if(target != null) {
-					Projectile newPro = new Projectile(1.0, this, 25);
+					Projectile newPro = new Projectile(2.0, this, 10, System.currentTimeMillis());
 					myGrid.getProjectileList().add(newPro);
-
 				}
 			}
-			else if(iteration % 300 == 0){
+			else if(iteration % 120 == 0){
 				getTargetM();
 				if(target != null) {
-					Projectile newPro = new Projectile(1.0, this, 25);
+					Projectile newPro = new Projectile(2.0, this, 10, System.currentTimeMillis());
 					myGrid.getProjectileList().add(newPro);
 				}
 				iteration = 0;

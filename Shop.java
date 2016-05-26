@@ -8,14 +8,17 @@ public class Shop {
 	private int total;
 	
 	public Shop(Controller xc) {
-		total = 100;
+		total = 50;
 		selectedItem = 0;
 		itemIsSelected = false;
 		control = xc;
-		shopItems = new ShopItem[3];
-		shopItems[0] = new ShopShooter(20);
-		shopItems[1] = new ShopSunflower(10);
-		shopItems[2] = new ShopRemover(0);
+		shopItems = new ShopItem[6];
+		shopItems[0] = new ShopShooter(100);
+		shopItems[1] = new ShopSunflower(50);
+		shopItems[2] = new ShopRock(50);
+		shopItems[3] = new ShopBomb(50);
+		shopItems[4] = new ShopDoubleShooter(200);
+		shopItems[5] = new ShopRemover(0);
 	}
 	
 	public ShopItem[] getShopItems() {
@@ -52,12 +55,12 @@ public class Shop {
 		
 	}
 	
-	public void processSelected(int r, int c) {
+	public void processSelected(int r, int c, boolean empty) {
 		if(somethingSelected()) {
 			ShopItem si = shopItems[selectedItem];
-			if(si instanceof ShopPlant) {
+			if(si instanceof ShopPlant && empty) {
 				control.plantProcessed(processPlantItem((ShopPlant)si), r, c);
-			} else {
+			} else if(si instanceof ShopRemover && !empty){
 				control.removePlant(r, c);
 			}
 		}

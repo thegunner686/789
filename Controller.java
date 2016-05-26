@@ -2,8 +2,6 @@ package thegame;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Queue;
 
 public class Controller implements Runnable
 {
@@ -38,7 +36,18 @@ public class Controller implements Runnable
     }
     
     public void run() {
-    	while(running) {
+    	for(int i = 0; i < 5; i++) {
+    		Lawnmower lm = new Lawnmower(System.currentTimeMillis());
+    		lm.putSelfInGrid(myGrid, new GridLocation(i, -1));
+    		gw.initializeActor(lm);
+    		myGrid.getActorList().add(lm);
+    		
+    	}
+    	int cpt = 300;
+		int currencyTimer = 1;
+		int dx = 800;
+    	while(true) {
+    		if(running) {
     		List<Actor> al = myGrid.getActorList();
     		//ListIterator<Actor> iter = al.listIterator();
     		for(Actor a : al) {
@@ -66,7 +75,11 @@ public class Controller implements Runnable
     		ArrayList<Currency> cq = myGrid.getCurrencyList();
     		for(int i = cq.size() - 1; i >= 0; i--) {
     			Currency ct = cq.remove(i);
-    			ct.putSelfInGrid(myGrid, ct.getParent().getGridLocation());
+    			GridLocation pLoc = ct.getParent().getGridLocation();
+    			ct.putSelfInGrid(myGrid, pLoc);
+    			if(ct.getDestinationRow() >= 0) {
+    				ct.getGridLocation().setRow(-5);
+    			}
     			gw.initializeActor(ct);
     		}
     		
@@ -76,16 +89,57 @@ public class Controller implements Runnable
     			myGrid.removePlant(gdl.getRow(), gdl.getCol());
     		}
     		
+    		if(currencyTimer % cpt == 0) {
+    			generateCurrency();
+    			System.out.println("CURRENCY CREATED");
+    			cpt += 20;
+    			currencyTimer = 0;
+    		}
+    		currencyTimer++;
+    		
     		gw.updateShopTotal(myShop.getTotal());
     		
-    		if(zombieTimer % 200 == 0 && zombieTimer > 800) 
-    			gw.initializeActor(myGrid.spawnZombie());
+    		if(zombieTimer % dx == 0 && zombieTimer >= 900) {
+    			if(dx > 700) {
+    				dx -= 25;
+        			gw.initializeActor(myGrid.spawnZombie(100, 25));
+    			} else if(dx > 600) {
+    				dx -= 25;
+    				for(int re = 0; re < 2; re++) 
+    					gw.initializeActor(myGrid.spawnZombie(150, 35));
+    			} else if(dx > 500) {
+    				dx -= 25;
+    				for(int re = 0; re < 3; re++)
+        				gw.initializeActor(myGrid.spawnZombie(200, 45));
+    			} else if(dx > 400) {
+    				dx -= 25;
+    				for(int re = 0; re < 4; re++)
+    					gw.initializeActor(myGrid.spawnZombie(250, 55));
+    			} else if(dx > 300){
+    				dx -= 25;
+    				for(int re = 0; re < 5; re++)
+        				gw.initializeActor(myGrid.spawnZombie(300, 65));
+    			} else {
+    				for(int re = 0; re < 5; re++)
+        				gw.initializeActor(myGrid.spawnZombie(350, 75));
+    			}
+    		}
     		gw.refresh();
     		zombieTimer++;
+    		}
     		try {
-    		Thread.sleep(1000 / 60);
-    		} catch(Exception e) {}
+        		Thread.sleep(1000 / 30);
+        		} catch(Exception e) {}
     	}
+    }
+    
+    public void generateCurrency() {
+    	Actor a = new Actor(System.currentTimeMillis());
+    	a.setGridLocation(new GridLocation((int) (Math.random() * 5), (int) (Math.random() * 9)));
+    	Currency ck = new Currency(25, a, a.getGridLocation().getRow(), System.currentTimeMillis());
+    	myGrid.getCurrencyList().add(ck);
+    	//ck.putSelfInGrid(myGrid, new GridLocation((int) (Math.random() * 5), (int) (Math.random() * 9)));
+    	//gw.initializeActor(ck);
     }
     
     public static void main(String[] args) {
@@ -99,7 +153,7 @@ public class Controller implements Runnable
     }
     
     public void gridButtonClicked(int r, int c) {
-    	myShop.processSelected(r,  c);
+    	myShop.processSelected(r,  c, myGrid.isEmpty(r, c));
     }
     
     public void currencyClicked(Actor a) {
@@ -109,8 +163,6 @@ public class Controller implements Runnable
     
     // called from shop class
 	public void plantProcessed(Actor processed, int r, int c) {
-		if(!myGrid.isEmpty(r, c))
-			return;
 		if(processed == null) 
 			return;
 		processed.setGridLocation(new GridLocation(r, c));
@@ -121,11 +173,21 @@ public class Controller implements Runnable
 	}
 	
 	public void removePlant(int r, int c) {
-		if(myGrid.isEmpty(r, c)) 
-			return;
 		Plant p = myGrid.getPlant(r,  c);
 		p.removeSelfFromGrid();
 		myGrid.getDeadPlantList().add(p);
 		System.out.println("LOL");
+	}
+	
+	public void pause() {
+		running = false;
+	}
+	
+	public void unpause() {
+		running = true;
+	}
+	
+	public boolean isRunning() {
+		return running;
 	}
 }

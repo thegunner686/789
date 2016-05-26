@@ -2,7 +2,8 @@ package thegame;
 
 public class Sunflower extends Plant {
 	
-	public Sunflower() {
+	public Sunflower(long tm) {
+		super(tm);
 		imageID = new Integer(4);
 		name = "sunflower";
 		health = 120;
@@ -15,8 +16,8 @@ public class Sunflower extends Plant {
 				removeSelfFromGrid();
 				return;
 			}
-			if(iteration % 2000 == 0) {
-				Currency c = new Currency(10, this);
+			if(iteration % 800 == 0) {
+				Currency c = new Currency(25, this, System.currentTimeMillis());
 				myGrid.getCurrencyList().add(c);
 			}
 			iteration++;

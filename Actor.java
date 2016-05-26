@@ -10,14 +10,16 @@ public class Actor {
 	protected int health;
 	protected int damage;
 	protected String name;
+	protected long timeCreated;
 	
 	
 	// Postcondition: Constructs a new actor
-	public Actor(){
+	public Actor(long tm){
 		health = 0;
 		damage = 0;
 		name = "";
 		imageID = new Integer(0);
+		timeCreated = tm;
 	}
 	
 	public Integer getID() {
@@ -79,6 +81,7 @@ public class Actor {
 		int i = 1;
 			i *= imageID.hashCode();
 			i *= name.hashCode();
+			i *= timeCreated;
 		return i;
 	}
 	

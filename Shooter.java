@@ -7,7 +7,8 @@ public class Shooter extends Plant{
 	
 	protected Zombie target;
 	
-	public Shooter() {
+	public Shooter(long tm) {
+		super(tm);
 		name = "shooter";
 		imageID = new Integer(2);
 		iteration = 1;
@@ -22,10 +23,10 @@ public class Shooter extends Plant{
 				removeSelfFromGrid();
 				return;
 			}
-			if(iteration % 300 == 0) {
+			if(iteration % 100 == 0) {
 				getTargetM();
 				if(target != null) {
-					Projectile newPro = new Projectile(1.0, this, 25);
+					Projectile newPro = new Projectile(2.0, this, 10, System.currentTimeMillis());
 					myGrid.getProjectileList().add(newPro);
 				}
 			}

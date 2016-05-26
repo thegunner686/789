@@ -1,33 +1,35 @@
+
 package thegame;
 
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.PriorityQueue;
 
 public class Bomb extends Plant {
-	public Bomb() {
+	
+	public Bomb(long tm) {
+		super(tm);
 		name = "bomb";
 		health = 0;
 		iteration = 1;
+		imageID = new Integer(5);
 	}
 
 	public void act(){
 		if(myGrid!=null){
-		
-			for (int i=-1 ; i < 2; i++){
-				PriorityQueue<Zombie> queue = myGrid.getZombieQueue(gl.getRow() + i);
-				Iterator<Zombie> iter = queue.iterator();
-				while (iter.hasNext()){
-					Zombie z = iter.next();
-					if (z.getPixelLocation().withinRange(this.getPixelLocation(), 75*Math.sqrt(2))){
-						System.out.print("boom");
-						z.setHealth(0);
-						z.removeSelfFromGrid();
-					}	
+			if(iteration == 20) {
+				for(int i = -1; i < 2; i++) {
+					if(myGrid.isValid(gl.getRow() + i, 0)) {
+					PriorityQueue<Zombie> queue = myGrid.getZombieQueue(gl.getRow() + i);
+					for(Zombie z : queue) {
+						if(z.getPixelLocation().withinRange(pl, 100)) 
+							z.removeSelfFromGrid();
+					}
+					}
 				}
+				myGrid.getDeadPlantList().add(this);
+				removeSelfFromGrid();
 			}
+			iteration++;
 		}
-		myGrid.getDeadPlantList().add(this);
-		removeSelfFromGrid();
-
 	}
 }

@@ -1,5 +1,7 @@
 package thegame;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,12 +15,17 @@ import java.util.*;
 
 public class GameWorld extends JFrame
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private HashMap<Actor, GameObject> gameObjects;
     private GridButton[][] gridButtons;
     private JButton[] shopButtons;
     private JLayeredPane myPanel;
     private Controller control;
     private JLabel shopTotal;
+    private JButton pauseButton;
 
     public GameWorld(Controller c)
     {
@@ -31,17 +38,24 @@ public class GameWorld extends JFrame
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        pauseButton = new JButton("Pause Game");
+        pauseButton.setBounds(400, 20, 150, 50);
+        PauseButtonListener listenForPause = new PauseButtonListener();
+        pauseButton.addActionListener(listenForPause);
+        myPanel.add(pauseButton);
+        
         shopTotal = new JLabel("0");
-        shopTotal.setBounds(200, 0, 70, 50);
+        shopTotal.setBounds(300, 0, 70, 50);
         
         myPanel.add(shopTotal);
         
         gridButtons = new GridButton[5][9];
-        shopButtons = new JButton[3];
+        shopButtons = new JButton[6];
         
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < shopButtons.length; i++) {
         	ShopButton j = new ShopButton(i);
         	j.setBounds(i * 50, 0, 50, 50);
+        	j.setBorder(new LineBorder(Color.BLACK, 2));
         	j.setMargin(new Insets(0, 0, 0, 0));
         	shopButtons[i] = j;
         	myPanel.add(j);
@@ -49,7 +63,10 @@ public class GameWorld extends JFrame
         	shopButtons[0].setIcon(control.getImageLoader().getImage(new Integer(2)));
         	
         	shopButtons[1].setIcon(control.getImageLoader().getImage(new Integer(4)));
-        	shopButtons[2].setIcon(control.getImageLoader().getImage(new Integer(6)));
+        	shopButtons[2].setIcon(control.getImageLoader().getImage(new Integer(8)));
+        	shopButtons[3].setIcon(control.getImageLoader().getImage(new Integer(5)));
+        	shopButtons[4].setIcon(control.getImageLoader().getImage(new Integer(2)));
+        	shopButtons[5].setIcon(control.getImageLoader().getImage(new Integer(6)));
         
         int buttonSize = 50;
         
@@ -58,7 +75,6 @@ public class GameWorld extends JFrame
                 GridButton j = new GridButton(i, q);
                 j.setBounds(q * buttonSize + 25, i * buttonSize + 100, buttonSize, buttonSize);
                 j.setMargin(new Insets(0, 0, 0, 0));
-                j.setBackground(Color.GREEN);
                 j.setBorderPainted(false);
                 //j.setBorder(null);
                 gridButtons[i][q] = j;
@@ -100,7 +116,10 @@ public class GameWorld extends JFrame
     		}
     	} else {
     	GameObject gm = gameObjects.get(a);
-    	gm.update();
+    	if(gm != null)
+    		gm.update();
+    	else
+    		System.out.println("THERE WAS A NULL GAME OBJECT");
     	}
     }
     
@@ -114,7 +133,11 @@ public class GameWorld extends JFrame
     }
     
     public class ShopButton extends JButton {
-    	protected int col;
+    	/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		protected int col;
     	protected ActionListener listenForShopButton;
     	
     	public ShopButton(int c) {
@@ -132,14 +155,24 @@ public class GameWorld extends JFrame
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(!control.isRunning())
+				return;
 			ShopButton jb = (ShopButton)e.getSource();
+			for(int q = 0; q < shopButtons.length; q++) {
+				shopButtons[q].setBorder(new LineBorder(Color.BLACK, 2));
+			}
+			jb.setBorder(new LineBorder(Color.YELLOW, 5));
 			control.shopButtonClicked(jb.getCol());
 		}
     	
     }
     
     public class GridButton extends JButton {
-    	protected int row;
+    	/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		protected int row;
     	protected int col;
     	protected ActionListener listenForGridButton;
     	
@@ -164,11 +197,29 @@ public class GameWorld extends JFrame
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(!control.isRunning())
+				return;
 			GridButton ex = (GridButton) e.getSource();
 			control.gridButtonClicked(ex.getRow(), ex.getCol());
 			System.out.print("clicked");
 		}
 		
+    	
+    }
+    
+    public class PauseButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JButton j = (JButton) e.getSource();
+			if(j.getText().equals("Pause Game")) {
+				j.setText("Unpause Game");
+				control.pause();
+			} else {
+				j.setText("Pause Game");
+				control.unpause();
+			}
+		}
     	
     }
     
@@ -179,13 +230,20 @@ public class GameWorld extends JFrame
     public class CurrencyListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
+			if(!control.isRunning())
+				return;
 			control.currencyClicked(((SpecialButtons.CurrencyButton)e.getSource()).getObject().getActor());
 		}
     	
     }
     
     public class drawPanel extends JLayeredPane {
-    	public void paintComponent(Graphics g) {
+    	/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public void paintComponent(Graphics g) {
         	super.paintComponent(g);
         	Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

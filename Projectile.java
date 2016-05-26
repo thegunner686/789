@@ -1,13 +1,11 @@
 package thegame;
 
-import java.util.Iterator;
-import java.util.PriorityQueue;
-
 public class Projectile extends Actor {
 	private double speed;
 	private Plant parent;
 	
-	public Projectile(Double s, Plant ps, int dmg) {
+	public Projectile(Double s, Plant ps, int dmg, long tm) {
+		super(tm);
 		name = "projectile";
 		speed = s;
 		imageID = new Integer(3);

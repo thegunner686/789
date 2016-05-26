@@ -1,16 +1,15 @@
 package thegame;
 
 public class ShopShooter extends ShopPlant {
-	private Shooter myPlant;
 	
 	public ShopShooter(int c) {
 		super(c);
-		myPlant = new Shooter();
+		myPlant = new Shooter(System.currentTimeMillis());
 	}
 	
 	public Plant getPlant() {
 		Plant temp = myPlant;
-		myPlant = new Shooter();
+		myPlant = new Shooter(System.currentTimeMillis());
 		return temp;
 	}
 	

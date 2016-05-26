@@ -74,9 +74,10 @@ public class Grid {
 	 *	Postcondition: spawns new zombie, adds zombie to zombieTracker & actorList, 
 	 *	and places new //zombie on the map
 	 */
-	public Zombie spawnZombie(){
-		Zombie z = new Zombie(100);
+	public Zombie spawnZombie(int he, int dmg){
+		Zombie z = new Zombie(he, System.currentTimeMillis());
 		GridLocation ranLoc = new GridLocation((int) (Math.random() * 5), 11);
+		z.setDamage(dmg);
 		z.putSelfInGrid(this, ranLoc);
 		zombieTracker[ranLoc.getRow()].add(z);
 		actorList.add((Actor) z);
