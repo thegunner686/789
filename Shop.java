@@ -6,16 +6,22 @@ public class Shop {
 	private ShopItem[] shopItems;
 	private Controller control;
 	private int total;
+	private boolean[] disabledPlants;
 	
-	public Shop(int s, Controller xc) {
-		total = 100;
+	public Shop(Controller xc) {
+		total = 50;
 		selectedItem = 0;
 		itemIsSelected = false;
 		control = xc;
-		shopItems = new ShopItem[s];
-		for(int i = 0; i < s; i++) {
-			shopItems[i] =  new ShopPlant(10);
-		}
+		
+		shopItems = new ShopItem[6];
+		disabledPlants = new boolean[shopItems.length];
+		shopItems[0] = new ShopShooter(100);
+		shopItems[1] = new ShopSunflower(50);
+		shopItems[2] = new ShopRock(50);
+		shopItems[3] = new ShopBomb(50);
+		shopItems[4] = new ShopDoubleShooter(200);
+		shopItems[5] = new ShopRemover(0);
 	}
 	
 	public ShopItem[] getShopItems() {
@@ -52,21 +58,34 @@ public class Shop {
 		
 	}
 	
-	public void processSelected(int r, int c) {
+	public void processSelected(int r, int c, boolean empty) {
 		if(somethingSelected()) {
 			ShopItem si = shopItems[selectedItem];
-			if(si instanceof ShopPlant) {
-				control.plantProcessed(processPlantItem((ShopPlant)si), r, c);
-			} else {
-				
+			if(disabledPlants[selectedItem])
+				return;
+			if(si instanceof ShopPlant && empty) {
+				if(control.getTimer() >= ((ShopPlant)si).getTimeTillReset()) {
+					((ShopPlant)si).setTimeTillReset(control.getTimer() + ((ShopPlant)si).getResetTime());
+					control.plantProcessed(processPlantItem((ShopPlant)si), r, c, selectedItem);
+				}
+			} else if(si instanceof ShopRemover && !empty){
+				control.removePlant(r, c);
 			}
 		}
 	}
 	
 	private Actor processPlantItem(ShopPlant s) {
-		if(canBuy(s.getCost()))
+		if(canBuy(s.getCost())) {
+				removeFromTotal(s.getCost());
 				return s.getPlant();
-		else
+		} else {
 				return null;
+		}
+	}
+	
+	public void disable(int c) {
+		if(c >= 0 && c < shopItems.length) {
+			disabledPlants[c] = true;
+		}
 	}
 }

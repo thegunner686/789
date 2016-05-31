@@ -1,17 +1,13 @@
 package thegame;
 
 public class Plant extends Actor{
-	private int iteration;
-	public Plant() {
-		imageID = new Integer(1);
-		iteration = 1;
-	}
+	protected int iteration;
 	
-	public void act() {
-		if(myGrid != null) {
-			Projectile newPro = new Projectile(1.0, this);
-			myGrid.getProjectileList().add(newPro);
-		}
+	public Plant(long tm) {
+		super(tm);
+		name = "plant";
+		health = 100;
+		iteration = 1;
 	}
 	
 	public int getIteration() {

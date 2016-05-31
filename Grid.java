@@ -10,12 +10,22 @@ public class Grid {
 	ArrayList<Projectile> projectileList;
 	ArrayList<Plant> plantWaitingList;
 	LinkedList<Actor> actorList;
+	ArrayList<Currency> currencyWaitingList;
+	ArrayList<Actor> deadPlantList;
+	int deadZombies;
+	int deadPlants;
+	Controller control;
 	
-	public Grid() {
+	public Grid(Controller ctr) {
+		deadZombies = 0;
+		deadPlants = 0;
+		control = ctr;
 		plantGrid = new Plant[5][9];
 		projectileList = new ArrayList<Projectile>();
 		plantWaitingList = new ArrayList<Plant>();
 		zombieTracker = new PriorityQueue[5];
+		deadPlantList = new ArrayList<Actor>();
+		currencyWaitingList = new ArrayList<Currency>();
 		for(int i = 0; i < 5; i++) {
 			zombieTracker[i] = new PriorityQueue<Zombie>();
 		}
@@ -34,6 +44,7 @@ public class Grid {
 		Plant temp = plantGrid[r][c];
 		plantGrid[r][c] = null;
 		actorList.remove(temp);
+		deadPlants++;
 		return temp;
 	}
 	
@@ -53,7 +64,7 @@ public class Grid {
 	 *	null if it doesn’t exist
 	 */
 	public Plant getPlant(int r, int c){
-		if (plantGrid[r][c] != null){
+		if(isValid(r, c) && plantGrid[r][c] != null){
 			return plantGrid[r][c];
 		}
 		return null;
@@ -70,21 +81,34 @@ public class Grid {
 	 *	Postcondition: spawns new zombie, adds zombie to zombieTracker & actorList, 
 	 *	and places new //zombie on the map
 	 */
-	public Zombie spawnZombie(){
-		Zombie z = new Zombie();
-		GridLocation ranLoc = new GridLocation((int) (Math.random() * 6), 11);
+	public Zombie spawnZombie(int he, int dmg){
+		Zombie z = new Zombie(he, System.currentTimeMillis());
+		GridLocation ranLoc = new GridLocation((int) (Math.random() * 5), 11);
+		z.setDamage(dmg);
 		z.putSelfInGrid(this, ranLoc);
 		zombieTracker[ranLoc.getRow()].add(z);
 		actorList.add((Actor) z);
+		//System.out.println("ZOMBIE CREATED");
 		return z;
 	}
 
 	// postcondition: returns the closest zombie in row r
 	public Zombie getFirstZombie(int r){
-		return zombieTracker[r].poll();
+		return zombieTracker[r].peek();
+	}
+	
+	public PriorityQueue<Zombie> getZombieQueue(int r) {
+		return zombieTracker[r];
 	}
 
+	public Zombie removeFirstZombie(int r) {
+		return zombieTracker[r].poll();
+	}
 	
+	
+	public ArrayList<Actor> getDeadPlantList() {
+		return deadPlantList;
+	}
 
 	//@return: actorList
 	public LinkedList<Actor> getActorList(){
@@ -101,6 +125,18 @@ public class Grid {
 	 */
 	public boolean isEmpty(int r, int c){
 		return plantGrid[r][c] == null;
+	}
+	
+	public ArrayList<Currency> getCurrencyList() {
+		return currencyWaitingList;
+	}
+	
+	public void incrementDeadZombies() {
+		deadZombies++;
+	}
+	
+	public Controller getController() {
+		return control;
 	}
 	
 }

@@ -9,10 +9,17 @@ public class Actor {
 	protected Grid myGrid;
 	protected int health;
 	protected int damage;
+	protected String name;
+	protected long timeCreated;
 	
 	
 	// Postcondition: Constructs a new actor
-	public Actor(){
+	public Actor(long tm){
+		health = 0;
+		damage = 0;
+		name = "";
+		imageID = new Integer(0);
+		timeCreated = tm;
 	}
 	
 	public Integer getID() {
@@ -54,9 +61,6 @@ public class Actor {
 	//precondition: This actor has a grid
 	//post condition: actor does nothing (overridden  method)
 	public void act(){
-		if(myGrid != null) {
-			
-		}
 	}
 	
 	
@@ -71,24 +75,26 @@ public class Actor {
 			g.addPlant((Plant) this, gl.getRow(), gl.getCol());
 		else
 			g.getActorList().add(this);	
-		health = 0;
-		damage = 0;
 	}
 	
 	public int hashCode() {
 		int i = 1;
-			i *= health;
-			i *= damage;
+			i *= name.hashCode();
+			i *= timeCreated;
 		return i;
 	}
 	
 	//postcondition: this actor is removed from myGrid, and myGrid is now null, gl is nul
 	public void removeSelfFromGrid(){
+		//myGrid.addDeadActor(this);
 		myGrid = null;
-		gl = null;
 	}
 	
 	public void setGridLocation(GridLocation g) {
 		gl = g;
+	}
+	
+	public Grid getGrid() {
+		return myGrid;
 	}
 }
