@@ -1,17 +1,28 @@
 package thegame;
 
 public class ShopPlant extends ShopItem {
-	private Plant myPlant;
-	
+	protected Plant myPlant;
+	protected int resetTime;
+	protected int timeTillReset;
 	public ShopPlant(int c) {
 		super(c);
-		myPlant = new Plant();
+		resetTime = 50;
 	}
 	
 	public Plant getPlant() {
-		Plant temp = myPlant;
-		myPlant = new Plant();
-		return temp;
+		return null;
+	}
+	
+	public void setTimeTillReset(int rt) {
+		timeTillReset = rt;
+	}
+	
+	public int getTimeTillReset() {
+		return timeTillReset;
+	}
+	
+	public int getResetTime() {
+		return resetTime;
 	}
 	
 }
